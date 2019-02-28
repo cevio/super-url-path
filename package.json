@@ -1,0 +1,25 @@
+{
+  "name": "super-url-path",
+  "version": "1.0.0",
+  "description": "A super library for formatting URL paths, similar to TS static grammar detection.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cevio/super-url-path.git"
+  },
+  "keywords": [
+    "url",
+    "regexp",
+    "path",
+    "format"
+  ],
+  "author": "evio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cevio/super-url-path/issues"
+  },
+  "homepage": "https://github.com/cevio/super-url-path#readme"
+}
