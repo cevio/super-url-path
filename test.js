@@ -6,5 +6,8 @@ const x = obj.router({
   cde: 345,
   value: 'dafa'
 });
-console.log(x)
-// { abc: 'dista', cde: '123', value: 'dd' }
+console.log(x); // { abc: 'dista', cde: '123', value: 'dd' }
+console.log(obj)
+const obj2 = new dpath('/abc/{zx?: any}');
+console.log(obj2.exec('/abc/des/abc-d_:dista*x--a123-d/testdd')); // { zx: 'des/abc-d_:dista*x--a123-d/testdd' }
+console.log(obj.deep, obj2.deep)

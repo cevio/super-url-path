@@ -1,6 +1,6 @@
 {
   "name": "super-url-path",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A super library for formatting URL paths, similar to TS static grammar detection.",
   "main": "index.js",
   "scripts": {

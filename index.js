@@ -1,7 +1,7 @@
 const list = {
   any: '.+',
   string: '[a-zA-Z0-9]+',
-  number: '\\d+'
+  number: '\\d+',
 }
 
 const NotFoundError = (name) => {
@@ -18,6 +18,7 @@ module.exports = class SuperUrlPath {
 
   constructor(path) {
     this.path = path;
+    this.features = [];
     this.init();
   }
 
@@ -35,11 +36,13 @@ module.exports = class SuperUrlPath {
         const delta = transformRegExp(chunk);
         match_tree.push(delta);
         exec_tree.push(delta);
+        this.features.push(chunk);
         continue;
       }
       const pathArray = chunk.split(/\{([^\}]+)\}/g);
       const match_pathes = [];
       const exec_pathes = [];
+      const features = [];
       for (let j = 0; j < pathArray.length; j++) {
         const item = pathArray[j];
         if (j % 2 === 1) {
@@ -55,14 +58,17 @@ module.exports = class SuperUrlPath {
           } else {
             match_pathes.push(`(${list[regexp]})`);
           }
+          features.push('{' + _idx + '}');
         } else {
           const _value = transformRegExp(item);
           exec_pathes.push(_value);
           match_pathes.push(_value);
+          features.push(item);
         }
       }
       match_tree.push(match_pathes.join(''));
       exec_tree.push(exec_pathes.join(''));
+      this.features.push(features);
     }
     this.match_regexp = new RegExp('^' + match_tree.join('\\/') + '$');
     this.exec_regexp = new RegExp('^' + exec_tree.join('\\/') + '$');
@@ -87,6 +93,16 @@ module.exports = class SuperUrlPath {
           throw new Error(`parameter ${i} is not the specified data type<${param.regexp}>`);
         }
       }
+      // path = this.features.map(item => {
+      //   if (!Array.isArray(item)) return item;
+      //   return item.map(data => {
+      //     if (data && data[0] === '{' && data[data.length - 1] === '}') {
+      //       const order = data.substring(1, data.length - 1);
+      //       return // TODO
+      //     }
+      //     return data;
+      //   }).join('');
+      // }).join('/');
       path = path.replace(new RegExp(`\\{\\s*?${i}(\\?)?\\:[^\\}]+\\}`), options[i] || '');
     }
     return path;
@@ -115,6 +131,8 @@ function format(exp) {
   if (ignore) {
     token = token.substr(0, token.length - 1);
   }
+  const tokenRegExp = /^[a-zA-Z_\$]([a-zA-Z0-9_\$]+)?$/;
+  if (!tokenRegExp.test(token)) throw new Error(`token<${token}> formatted error, only '${tokenRegExp.toString()}' can been accepted.`);
   return {
     token, regexp, ignore
   }
